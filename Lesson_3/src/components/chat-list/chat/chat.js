@@ -12,6 +12,9 @@ import styles from "./chat.module.css"
 
 const StyledListItem = withStyles(() => ({
   root: {
+    "&": {
+      borderRadius: 5,
+    },
     "&.Mui-selected": {
       backgroundColor: "#2b5278",
     },

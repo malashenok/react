@@ -1,33 +1,27 @@
-// import { Test } from "@components/app"
 import { ThemeProvider, createMuiTheme } from "@material-ui/core"
 import React, { Component } from "react"
 import ReactDOM from "react-dom"
-import { MessageList, Layout, ChatList } from "./components"
-// import styles from "./index.module.css"
+import { Header, MessageList, Layout, ChatList } from "./components"
 
 import "./index.css"
 
 class App extends Component {
   render() {
-    return (
-      <div>
-        <h1>Сообщения</h1>
-        <MessageList />
-      </div>
-    )
+    return <MessageList />
   }
 }
 
-const dark = {
-  color: "red",
-}
-
-const theme = createMuiTheme(dark)
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#ffffff'
+    },
+  },
+})
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    <Layout messages={<App />} />
-    <ChatList />
+    <Layout header={<Header />} messages={<App />} chats={<ChatList />} />
   </ThemeProvider>,
   document.getElementById("root"),
 )

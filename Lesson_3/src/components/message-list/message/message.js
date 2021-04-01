@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import React, { Component } from "react"
+import styles from "./message.module.css"
 
 export class Message extends Component {
   static propTypes = {
@@ -15,9 +16,8 @@ export class Message extends Component {
     } = this.props
 
     return (
-      <div>
-        <h3>{value}</h3>
-        <p>{author}</p>
+      <div className={styles.message}>
+        <h3>{author}: {value}</h3>
       </div>
     )
   }

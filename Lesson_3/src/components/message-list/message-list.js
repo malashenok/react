@@ -1,7 +1,6 @@
-import { Input, withStyles, InputAdornment } from "@material-ui/core"
+import { Grid, Input, withStyles, InputAdornment } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import React, { Component } from "react"
-
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -19,7 +18,7 @@ const StyledInput = withStyles(() => {
 
 export class MessageList extends Component {
   state = {
-    messages: [{ author: "User", value: "Тест сообщение" }],
+    messages: [],
     value: "",
   }
 
@@ -49,7 +48,7 @@ export class MessageList extends Component {
 
     const lastMessage = messages[messages.length - 1]
 
-    if (lastMessage.author === "User" && state.messages !== messages) {
+    if (lastMessage?.author === "User" && state.messages !== messages) {
       setTimeout(() => {
         this.sendMessage({ author: "bot", value: "Как дела ?" })
       }, 500)
@@ -61,9 +60,13 @@ export class MessageList extends Component {
 
     return (
       <div>
-        {messages.map((message, index) => (
-          <Message message={message} key={index} />
-        ))}
+        <div className={styles.grid}>
+          {messages.map((message, index) => (
+            <div className={message.author === 'bot' ? styles.bot : styles.user}>
+              <Message message={message} key={index} />
+            </div>
+          ))}
+        </div>
         <StyledInput
           fullWidth={true}
           value={value}
