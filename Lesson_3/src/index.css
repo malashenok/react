@@ -103,6 +103,7 @@ section {
 }
 body {
   line-height: 1;
+  background-color: #182533;
 }
 ol,
 ul {
@@ -165,9 +166,4 @@ html {
     linear-gradient(330deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
     linear-gradient(90deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
   background-color: #2b5278;
-}
-
-/* @TODO убрать стиль */
-body {
-  background-color: grey;
 }
