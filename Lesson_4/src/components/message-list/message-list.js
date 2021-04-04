@@ -1,5 +1,6 @@
-import { Grid, Input, withStyles, InputAdornment } from "@material-ui/core"
+import { Input, withStyles, InputAdornment } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
+import classNames from "classnames"
 import React, { Component } from "react"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
@@ -62,7 +63,9 @@ export class MessageList extends Component {
       <div>
         <div className={styles.grid}>
           {messages.map((message, index) => (
-            <div className={message.author === 'bot' ? styles.bot : styles.user}>
+            <div key={index} className={classNames(styles.message, {
+              [styles.user]: message.author === "User",
+            })}>
               <Message message={message} key={index} />
             </div>
           ))}
