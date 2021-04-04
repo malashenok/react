@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-boolean-value */
+import { Container, Grid } from '@material-ui/core'
 import PropTypes from "prop-types"
 import React, { Component } from "react"
-import { Container, Grid } from '@material-ui/core'
 import styles from "./layout.module.css"
 
 export class Layout extends Component {

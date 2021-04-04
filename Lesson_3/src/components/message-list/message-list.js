@@ -1,4 +1,4 @@
-import { Grid, Input, withStyles, InputAdornment } from "@material-ui/core"
+import { Input, withStyles, InputAdornment } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import React, { Component } from "react"
 import { Message } from "./message"
@@ -50,8 +50,8 @@ export class MessageList extends Component {
 
     if (lastMessage?.author === "User" && state.messages !== messages) {
       setTimeout(() => {
-        this.sendMessage({ author: "bot", value: "Как дела ?" })
-      }, 500)
+        this.sendMessage({ author: "bot", value: "Как дела111n   ?" })
+      }, 3000)
     }
   }
 
@@ -62,7 +62,7 @@ export class MessageList extends Component {
       <div>
         <div className={styles.grid}>
           {messages.map((message, index) => (
-            <div className={message.author === 'bot' ? styles.bot : styles.user}>
+            <div key={index} className={message.author === 'bot' ? styles.bot : styles.user}>
               <Message message={message} key={index} />
             </div>
           ))}
