@@ -50,8 +50,8 @@ export class MessageList extends Component {
 
     if (lastMessage?.author === "User" && state.messages !== messages) {
       setTimeout(() => {
-        this.sendMessage({ author: "bot", value: "Как дела111n   ?" })
-      }, 3000)
+        this.sendMessage({ author: "bot", value: "Как дела ?" })
+      }, 500)
     }
   }
 
