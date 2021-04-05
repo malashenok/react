@@ -12,13 +12,13 @@ export class MessageProvider extends Component {
     conversations: [
       {
         title: "room1",
-        value: "value from room1",
+        value: "",
         lastMessage: {}
 
       },
       {
         title: "room2",
-        value: "value from room2",
+        value: "",
         lastMessage: {}
       }
     ],
@@ -28,25 +28,44 @@ export class MessageProvider extends Component {
     },
   }
 
-  sendMessage({ author, message, createdTs }) {
+  handleValueChanged = ({ target }) => {
 
-    const id = this.props.match.params.id
-    const msg = { author, message, createdTs }
-
-    this.setState((state) => ({
+    this.setState((state, props) => ({
       conversations: state.conversations.map(e => {
-        if (e.title === id) {
-          e.value = message
-          e.lastMessage = msg
+        if (e.title === props.match.params.id) {
+          e.value = target.value
         }
         return e
-      }),
-      messages: Object.assign(
-        {},
-        state.messages,
-        state.messages[id].push(msg),
-        state.messages[id].push({ author: "bot", message: "ok", createdTs }))
+      })
     }))
+  }
+
+  sendMessage({ author, message, createdTs }) {
+    this.setState((state, props) => {
+      const { id } = props.match.params
+
+      const value = state.conversations.find((conversation) => conversation.title === id)
+        ?.value || ""
+
+      const msg = { author, message, createdTs }
+
+      return {
+        conversations: state.conversations.map(e => {
+          if (e.title === props.match.params.id) {
+            e.value = ""
+            e.lastMessage = value
+          }
+          return e
+        }),
+        messages: Object.assign(
+          {},
+          state.messages,
+          state.messages[id].push(msg),
+          state.messages[id].push({ author: "bot", message: "ok", createdTs }))
+      }
+    }
+
+    )
   }
 
   render() {
@@ -64,7 +83,7 @@ export class MessageProvider extends Component {
           ?.value || "",
     }
 
-    const actions = { sendMessage: this.sendMessage.bind(this) }
+    const actions = { sendMessage: this.sendMessage.bind(this), handleValueChanged: this.handleValueChanged.bind(this) }
 
     return children([state, actions])
   }

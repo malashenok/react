@@ -27,7 +27,8 @@ export class MessageList extends Component {
   static propTypes = {
     messages: PropTypes.array,
     value: PropTypes.string,
-    sendMessage: PropTypes.func
+    sendMessage: PropTypes.func,
+    handleValueChanged: PropTypes.func
   }
 
   ref = createRef()
@@ -65,9 +66,7 @@ export class MessageList extends Component {
 
   render() {
 
-    const { messages } = this.props
-    const { value } = this.state
-
+    const { messages, sendMessage, handleValueChanged, value } = this.props
     const createdTs = format(new Date(), "HH:mm")
 
     return (
@@ -80,19 +79,17 @@ export class MessageList extends Component {
         <StyledInput
           fullWidth={true}
           value={value}
-          onChange={this.handleChangeInput}
+          onChange={(target) => { handleValueChanged(target) }}
           onKeyPress={this.handlePressInput}
           placeholder="Введите сообщение..."
           endAdornment={
             <InputAdornment position="end">
-              {value && (
-                <Send
-                  className={styles.icon}
-                  onClick={() => {
-                    this.props.sendMessage({ author: "User", message: value, createdTs })
-                  }}
-                />
-              )}
+              <Send
+                className={styles.icon}
+                onClick={() => {
+                  sendMessage({ author: "User", message: value, createdTs })
+                }}
+              />
             </InputAdornment>
           }
         />
