@@ -19,10 +19,6 @@ const StyledInput = withStyles(() => {
 })(Input)
 
 export class MessageList extends Component {
-  state = {
-    value: "",
-  }
-
 
   static propTypes = {
     messages: PropTypes.array,
@@ -33,15 +29,10 @@ export class MessageList extends Component {
 
   ref = createRef()
 
-  handleChangeInput = ({ target }) => {
-    this.setState({
-      value: target.value,
-    })
-  }
+  handlePressInput = (event, value) => {
 
-  handlePressInput = ({ code }) => {
-    if (code === "Enter") {
-      this.props.sendMessage({ author: "User", message: this.state.value, createdTs: format(new Date(), "HH:mm") })
+    if (event.code === "Enter") {
+      this.props.sendMessage({ author: "User", message: value, createdTs: format(new Date(), "HH:mm") })
     }
   }
 
@@ -50,19 +41,6 @@ export class MessageList extends Component {
       this.ref.current.scrollTo(0, this.ref.current.scrollHeight)
     }
   }
-
-  // componentDidUpdate(_, state) {
-  //   const { messages } = this.state
-
-  //   const lastMessage = messages[messages.length - 1]
-
-  //   if (lastMessage?.author === "User" && state.messages !== messages) {
-  //     setTimeout(() => {
-  //       this.sendMessage({ author: "bot", value: "Как дела ?" })
-  //     }, 500)
-  //   }
-  //   this.handleScrollBottom()
-  // }
 
   render() {
 
@@ -80,16 +58,18 @@ export class MessageList extends Component {
           fullWidth={true}
           value={value}
           onChange={(target) => { handleValueChanged(target) }}
-          onKeyPress={this.handlePressInput}
+          onKeyPress={(event) => { this.handlePressInput(event, value) }}
           placeholder="Введите сообщение..."
           endAdornment={
             <InputAdornment position="end">
-              <Send
-                className={styles.icon}
-                onClick={() => {
-                  sendMessage({ author: "User", message: value, createdTs })
-                }}
-              />
+              {value && (
+                <Send
+                  className={styles.icon}
+                  onClick={() => {
+                    sendMessage({ author: "User", message: value, createdTs })
+                  }}
+                />
+              )}
             </InputAdornment>
           }
         />

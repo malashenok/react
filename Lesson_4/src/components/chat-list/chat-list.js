@@ -11,10 +11,6 @@ export class ChatList extends Component {
     match: PropTypes.object.isRequired
   }
 
-  // handleListItemClick = (index) => {
-  //   this.setState({ selectedIndex: index })
-  // }
-
   render() {
     const { conversations, match } = this.props
     const chatId = match?.params.id || ""
