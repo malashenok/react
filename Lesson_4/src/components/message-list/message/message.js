@@ -5,22 +5,23 @@ import styles from "./message.module.css"
 
 export class Message extends Component {
   static propTypes = {
-    message: PropTypes.shape({
+    msg: PropTypes.shape({
       author: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+      createdTs: PropTypes.string.isRequired
     }),
   }
 
   render() {
-    const {
-      message: { value, author },
-    } = this.props
+    const { msg: { message, author, createdTs } } = this.props
 
     return (
       <div className={classNames(styles.message, {
         [styles.user]: author === "User",
       })}>
-        <h3>{author}: {value}</h3>
+        <h3>{author}</h3>
+        <p>{message}</p>
+        <p>{createdTs}</p>
       </div>
     )
   }

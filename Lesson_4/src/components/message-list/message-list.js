@@ -1,6 +1,8 @@
 import { Input, withStyles, InputAdornment } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
-import React, { Component } from "react"
+import { format } from "date-fns"
+import PropTypes from "prop-types"
+import React, { Component, createRef } from "react"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -18,18 +20,17 @@ const StyledInput = withStyles(() => {
 
 export class MessageList extends Component {
   state = {
-    messages: [],
     value: "",
   }
 
-  sendMessage = ({ author, value }) => {
-    const { messages } = this.state
 
-    this.setState({
-      messages: [...messages, { author, value }],
-      value: "",
-    })
+  static propTypes = {
+    messages: PropTypes.array,
+    value: PropTypes.string,
+    sendMessage: PropTypes.func
   }
+
+  ref = createRef()
 
   handleChangeInput = ({ target }) => {
     this.setState({
@@ -39,30 +40,41 @@ export class MessageList extends Component {
 
   handlePressInput = ({ code }) => {
     if (code === "Enter") {
-      this.sendMessage({ author: "User", value: this.state.value })
+      this.props.sendMessage({ author: "User", message: this.state.value, createdTs: format(new Date(), "HH:mm") })
     }
   }
 
-  componentDidUpdate(_, state) {
-    const { messages } = this.state
-
-    const lastMessage = messages[messages.length - 1]
-
-    if (lastMessage?.author === "User" && state.messages !== messages) {
-      setTimeout(() => {
-        this.sendMessage({ author: "bot", value: "Как дела ?" })
-      }, 500)
+  handleScrollBottom = () => {
+    if (this.ref.current) {
+      this.ref.current.scrollTo(0, this.ref.current.scrollHeight)
     }
   }
+
+  // componentDidUpdate(_, state) {
+  //   const { messages } = this.state
+
+  //   const lastMessage = messages[messages.length - 1]
+
+  //   if (lastMessage?.author === "User" && state.messages !== messages) {
+  //     setTimeout(() => {
+  //       this.sendMessage({ author: "bot", value: "Как дела ?" })
+  //     }, 500)
+  //   }
+  //   this.handleScrollBottom()
+  // }
 
   render() {
-    const { messages, value } = this.state
+
+    const { messages } = this.props
+    const { value } = this.state
+
+    const createdTs = format(new Date(), "HH:mm")
 
     return (
       <>
-        <div className={styles.grid}>
+        <div ref={this.ref} className={styles.grid}>
           {messages.map((message, index) => (
-            <Message message={message} key={index} />
+            <Message msg={message} key={index} />
           ))}
         </div>
         <StyledInput
@@ -77,7 +89,7 @@ export class MessageList extends Component {
                 <Send
                   className={styles.icon}
                   onClick={() => {
-                    this.sendMessage({ author: "User", value })
+                    this.props.sendMessage({ author: "User", message: value, createdTs })
                   }}
                 />
               )}

@@ -7,12 +7,17 @@
   background-color: #2b5278;
   border-radius: 5px;
   padding: 10px;
+  line-height: 14px;
   color: white;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  hyphens: auto;
 }
 
 .user {
   display: inline-block;
+  text-align: right;
+}
+
+.message p {
+  margin-top: 5px;
 }
