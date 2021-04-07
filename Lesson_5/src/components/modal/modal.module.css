@@ -1,0 +1,19 @@
+.wrapper {
+  height: 200px;
+  width: 200px;
+}
+
+.wrapper ul li {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.wrapper ul {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.title {
+  text-align: center;
+  flex: none;
+}

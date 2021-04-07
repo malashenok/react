@@ -1,1 +1,1 @@
-export const b = {}
+export const MESSAGE_SEND = "@message/send"
