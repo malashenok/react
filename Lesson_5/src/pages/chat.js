@@ -6,9 +6,8 @@ import { MessageProvider } from "../components"
 import styles from "./chat.module.css"
 
 export class ChatPage extends Component {
-
   static propTypes = {
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
@@ -34,7 +33,7 @@ export class ChatPage extends Component {
             return (
               <MessageProvider {...params}>
                 {([state, actions]) => (
-                  <Layout header={<Header />} chats={<ChatList {...params} conversations={state.conversations} />} >
+                  <Layout header={<Header />} chats={<ChatList {...params} />}>
                     <Route path="/chat/:id">
                       <MessageList {...state} {...actions} />
                     </Route>
@@ -47,7 +46,10 @@ export class ChatPage extends Component {
             )
           }}
         </Route>
-        <Route path="*" component={() => <h1 className={styles.error}>такого чата нет</h1>} />
+        <Route
+          path="*"
+          component={() => <h1 className={styles.error}>такого чата нет</h1>}
+        />
       </Switch>
     )
   }

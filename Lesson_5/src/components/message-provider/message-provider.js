@@ -1,4 +1,4 @@
-import PropTypes from "prop-types"
+import { format } from "date-fns"
 import { Component } from "react"
 
 export class MessageProvider extends Component {
@@ -63,7 +63,34 @@ export class MessageProvider extends Component {
     })
   }
 
-  componentDidUpdate() { }
+  componentDidUpdate(_, prevState) {
+    const {
+      match: { params },
+    } = this.props
+
+    const { conversations, messages } = this.state
+
+    if (!params.id) {
+      return
+    }
+
+    const { lastMessage } = conversations.find(
+      (conversation) => conversation.title === params.id,
+    )
+
+    const currentMessages = messages[params.id]
+    const prevMessages = prevState.messages[params.id]
+
+    if (lastMessage?.author !== "bot" && currentMessages !== prevMessages) {
+      setTimeout(() => {
+        this.sendMessage({
+          author: "bot",
+          message: "Как дела?",
+          createdTs: format(new Date(), "HH:mm:ss"),
+        })
+      }, 500)
+    }
+  }
 
   render() {
     const { children, match } = this.props
@@ -82,6 +109,7 @@ export class MessageProvider extends Component {
     const actions = {
       sendMessage: this.sendMessage,
       handleChangeValue: this.handleChangeValue,
+      componentDidUpdate: this.componentDidUpdate,
     }
 
     return children([state, actions])

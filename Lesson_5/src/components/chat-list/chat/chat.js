@@ -5,7 +5,6 @@ import {
   withStyles,
 } from "@material-ui/core"
 import { AccountCircle } from "@material-ui/icons"
-import { format } from "date-fns"
 import PropTypes from "prop-types"
 import React, { Component } from "react"
 
@@ -26,23 +25,32 @@ const StyledListItem = withStyles(() => ({
 }))(ListItem)
 
 export class Chat extends Component {
-
   static propTypes = {
     title: PropTypes.string.isRequired,
     selected: PropTypes.bool.isRequired,
+    msg: PropTypes.object.isRequired,
   }
 
   render() {
-    const { selected, title } = this.props
+    const { selected, title, msg } = this.props
 
     return (
-      <StyledListItem button={true} selected={selected} >
+      <StyledListItem button={true} selected={selected}>
         <ListItemIcon>
           <AccountCircle fontSize="large" className={styles.icon} />
         </ListItemIcon>
         <div className={styles.description}>
           <ListItemText className={styles.text} primary={title} />
-          <ListItemText className={styles.text} primary={format(new Date(), " HH:mm")} />
+          <ListItemText
+            className={styles.text}
+            primary={`${msg?.author ? msg.author + " - " : ""}${
+              msg?.message ?? ""
+            }`}
+          />
+          <ListItemText
+            className={styles.text}
+            primary={msg?.createdTs ?? ""}
+          />
         </div>
       </StyledListItem>
     )
