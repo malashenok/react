@@ -20,7 +20,7 @@ ReactDOM.render(
         <Route path="/chat" component={(params) => (
           <ChatPage {...params} />
         )} />
-        <Route path="*" component={() => <h1>404</h1>} />
+        <Route path="*" component={() => <h1 className="error">Страница не найдена</h1>} />
       </Switch>
     </ThemeProvider>
   </BrowserRouter>,

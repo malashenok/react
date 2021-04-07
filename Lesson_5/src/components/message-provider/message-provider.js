@@ -2,74 +2,70 @@ import PropTypes from "prop-types"
 import { Component } from "react"
 
 export class MessageProvider extends Component {
-
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    match: PropTypes.object,
-  }
-
   state = {
     conversations: [
       {
         title: "room1",
         value: "",
-        lastMessage: {}
-
+        lastMessage: {},
       },
       {
         title: "room2",
         value: "",
-        lastMessage: {}
-      }
+        lastMessage: {},
+      },
     ],
     messages: {
       room1: [],
-      room2: []
+      room2: [],
     },
   }
 
-  handleChangeValue = ({ target }) => {
+  handleChangeValue = (value) => {
+    this.setState((state, props) => {
+      const {
+        match: { params },
+      } = props
 
-    this.setState((state, props) => ({
-      conversations: state.conversations.map(e => {
-        if (e.title === props.match.params.id) {
-          e.value = target.value
-        }
-        return e
-      })
-    }))
+      return {
+        conversations: state.conversations.map((conversation) => {
+          if (conversation.title === params.id) {
+            return { ...conversation, value }
+          }
+          return conversation
+        }),
+      }
+    })
   }
 
   sendMessage = ({ author, message, createdTs }) => {
-    this.setState((state, props) => {
-      const { id } = props.match.params
+    if (!message) return
 
-      const value = state.conversations.find((conversation) => conversation.title === id)
-        ?.value || ""
+    this.setState((state, props) => {
+      const {
+        match: { params },
+      } = props
 
       const msg = { author, message, createdTs }
 
       return {
-        conversations: state.conversations.map(e => {
-          if (e.title === props.match.params.id) {
-            e.value = ""
-            e.lastMessage = value
+        conversations: state.conversations.map((conversation) => {
+          if (conversation.title === params.id) {
+            return { ...conversation, lastMessage: msg, value: "" }
           }
-          return e
+          return conversation
         }),
-        messages: Object.assign(
-          {},
-          state.messages,
-          state.messages[id].push(msg),
-          state.messages[id].push({ author: "bot", message: "ok", createdTs }))
+        messages: {
+          ...state.messages,
+          [params.id]: [...(state.messages[params.id] || []), msg],
+        },
       }
-    }
-
-    )
+    })
   }
 
-  render() {
+  componentDidUpdate() { }
 
+  render() {
     const { children, match } = this.props
     const { messages, conversations } = this.state
 
@@ -83,7 +79,10 @@ export class MessageProvider extends Component {
           ?.value || "",
     }
 
-    const actions = { sendMessage: this.sendMessage.bind(this), handleValueChanged: this.handleValueChanged.bind(this) }
+    const actions = {
+      sendMessage: this.sendMessage,
+      handleChangeValue: this.handleChangeValue,
+    }
 
     return children([state, actions])
   }

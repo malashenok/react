@@ -21,10 +21,10 @@ const StyledInput = withStyles(() => {
 export class MessageList extends Component {
 
   static propTypes = {
-    messages: PropTypes.array,
-    value: PropTypes.string,
-    sendMessage: PropTypes.func,
-    handleValueChanged: PropTypes.func
+    messages: PropTypes.array.isRequired,
+    value: PropTypes.string.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    handleChangeValue: PropTypes.func.isRequired
   }
 
   ref = createRef()
@@ -32,7 +32,7 @@ export class MessageList extends Component {
   handlePressInput = (event, value) => {
 
     if (event.code === "Enter") {
-      this.props.sendMessage({ author: "User", message: value, createdTs: format(new Date(), "HH:mm") })
+      this.props.sendMessage({ author: "User", message: value, createdTs: format(new Date(), "HH:mm:ss") })
     }
   }
 
@@ -44,8 +44,7 @@ export class MessageList extends Component {
 
   render() {
 
-    const { messages, sendMessage, handleValueChanged, value } = this.props
-    const createdTs = format(new Date(), "HH:mm")
+    const { messages, value, sendMessage, handleChangeValue } = this.props
 
     return (
       <>
@@ -57,8 +56,8 @@ export class MessageList extends Component {
         <StyledInput
           fullWidth={true}
           value={value}
-          onChange={(target) => { handleValueChanged(target) }}
-          onKeyPress={(event) => { this.handlePressInput(event, value) }}
+          onChange={e => { handleChangeValue(e.target.value) }}
+          onKeyPress={e => { this.handlePressInput(e, value) }}
           placeholder="Введите сообщение..."
           endAdornment={
             <InputAdornment position="end">
@@ -66,7 +65,7 @@ export class MessageList extends Component {
                 <Send
                   className={styles.icon}
                   onClick={() => {
-                    sendMessage({ author: "User", message: value, createdTs })
+                    sendMessage({ author: "User", message: value, createdTs: format(new Date(), "HH:mm:ss") })
                   }}
                 />
               )}

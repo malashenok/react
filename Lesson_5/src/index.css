@@ -172,3 +172,10 @@ a {
   box-sizing: unset;
   text-decoration: none;
 }
+
+.error {
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  margin-top: 20px;
+}
