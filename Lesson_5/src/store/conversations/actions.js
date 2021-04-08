@@ -1,15 +1,16 @@
 import { ADD_CONVERSATION, CHANGE_VALUE } from "./types"
 
-export const addConversation = (contact) => {
+export const addConversation = (params) => {
+  if (!params) return
   return {
     type: ADD_CONVERSATION,
-    payload: contact,
+    payload: params,
   }
 }
 
-export const changeValue = (id, value) => {
+export const changeValue = (params) => {
   return {
     type: CHANGE_VALUE,
-    payload: { id, value },
+    payload: params,
   }
 }

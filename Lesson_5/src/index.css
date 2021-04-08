@@ -137,7 +137,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #2b5278;
+  background-color: whitesmoke;
 }
 
 ::-webkit-scrollbar-button:vertical:start:decrement {

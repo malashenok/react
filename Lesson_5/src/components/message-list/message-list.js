@@ -1,8 +1,10 @@
 import { Input, withStyles, InputAdornment } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import { format } from "date-fns"
-import PropTypes from "prop-types"
 import React, { Component, createRef } from "react"
+import { connect } from "react-redux"
+import { changeValue } from "../../store/conversations"
+import { sendMessage } from "../../store/messages"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -18,21 +20,17 @@ const StyledInput = withStyles(() => {
   }
 })(Input)
 
-export class MessageList extends Component {
-
-  static propTypes = {
-    messages: PropTypes.array.isRequired,
-    value: PropTypes.string.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-    handleChangeValue: PropTypes.func.isRequired
-  }
-
+export class MessageListView extends Component {
   ref = createRef()
 
-  handlePressInput = (event, value) => {
-
-    if (event.code === "Enter") {
-      this.props.sendMessage({ author: "User", message: value, createdTs: format(new Date(), "HH:mm:ss") })
+  handlePressInput = (event, value, id) => {
+    if (event.code === "Enter" && value) {
+      this.props.sendMessageWithDispatch({
+        id,
+        author: "User",
+        message: value,
+        createdTs: format(new Date(), "HH:mm:ss"),
+      })
     }
   }
 
@@ -43,21 +41,43 @@ export class MessageList extends Component {
   }
 
   render() {
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props
 
-    const { messages, value, sendMessage, handleChangeValue } = this.props
+    const {
+      messages,
+      conversations,
+      sendMessageWithDispatch,
+      changeValueWithDispatch,
+    } = this.props
+
+    const value = conversations.find((e) => e.title === id)?.value ?? ""
+
+    const newMessage = {
+      author: "User",
+      message: value,
+      createdTs: format(new Date(), "HH:mm:ss"),
+    }
 
     return (
       <>
         <div ref={this.ref} className={styles.grid}>
-          {messages.map((message, index) => (
+          {(messages[id] ?? []).map((message, index) => (
             <Message msg={message} key={index} />
           ))}
         </div>
         <StyledInput
           fullWidth={true}
           value={value}
-          onChange={e => { handleChangeValue(e.target.value) }}
-          onKeyPress={e => { this.handlePressInput(e, value) }}
+          onChange={(e) => {
+            changeValueWithDispatch({ title: id, value: e.target.value })
+          }}
+          onKeyPress={(e) => {
+            this.handlePressInput(e, value, id)
+          }}
           placeholder="Введите сообщение..."
           endAdornment={
             <InputAdornment position="end">
@@ -65,7 +85,14 @@ export class MessageList extends Component {
                 <Send
                   className={styles.icon}
                   onClick={() => {
-                    sendMessage({ author: "User", message: value, createdTs: format(new Date(), "HH:mm:ss") })
+                    sendMessageWithDispatch({
+                      id,
+                      ...newMessage,
+                    })
+                    changeValueWithDispatch({
+                      title: id,
+                      value: "",
+                    })
                   }}
                 />
               )}
@@ -76,3 +103,18 @@ export class MessageList extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  messages: state.messagesReducer,
+  conversations: state.conversationsReducer,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  sendMessageWithDispatch: (params) => dispatch(sendMessage(params)),
+  changeValueWithDispatch: (params) => dispatch(changeValue(params)),
+})
+
+export const MessageList = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MessageListView)

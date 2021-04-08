@@ -2,7 +2,6 @@ import { Header, MessageList, Layout, ChatList } from "@components"
 import PropTypes from "prop-types"
 import React, { Component } from "react"
 import { Switch, Route } from "react-router-dom"
-import { MessageProvider } from "../components"
 import styles from "./chat.module.css"
 
 export class ChatPage extends Component {
@@ -31,18 +30,14 @@ export class ChatPage extends Component {
         <Route path={["/chat/:id", "/chat"]}>
           {(params) => {
             return (
-              <MessageProvider {...params}>
-                {([state, actions]) => (
-                  <Layout header={<Header />} chats={<ChatList {...params} />}>
-                    <Route path="/chat/:id">
-                      <MessageList {...state} {...actions} />
-                    </Route>
-                    <Route exact={true} path="/chat">
-                      <h1 className={styles.error}>Выберите чат</h1>
-                    </Route>
-                  </Layout>
-                )}
-              </MessageProvider>
+              <Layout header={<Header />} chats={<ChatList {...params} />}>
+                <Route path="/chat/:id">
+                  <MessageList {...params} />
+                </Route>
+                <Route exact={true} path="/chat">
+                  <h1 className={styles.error}>Выберите чат</h1>
+                </Route>
+              </Layout>
             )
           }}
         </Route>

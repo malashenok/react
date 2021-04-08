@@ -5,7 +5,6 @@ import {
   withStyles,
 } from "@material-ui/core"
 import { AccountCircle } from "@material-ui/icons"
-import PropTypes from "prop-types"
 import React, { Component } from "react"
 
 import styles from "./chat.module.css"
@@ -25,14 +24,14 @@ const StyledListItem = withStyles(() => ({
 }))(ListItem)
 
 export class Chat extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    selected: PropTypes.bool.isRequired,
-    msg: PropTypes.object.isRequired,
-  }
-
   render() {
-    const { selected, title, msg } = this.props
+    const {
+      selected,
+      title,
+      lastMessage: [msg = {}],
+    } = this.props
+
+    const { author = "", message = "", createdTs = "" } = msg ?? {}
 
     return (
       <StyledListItem button={true} selected={selected}>
@@ -43,14 +42,9 @@ export class Chat extends Component {
           <ListItemText className={styles.text} primary={title} />
           <ListItemText
             className={styles.text}
-            primary={`${msg?.author ? msg.author + " - " : ""}${
-              msg?.message ?? ""
-            }`}
+            primary={author && message ? author + " - " + message : ""}
           />
-          <ListItemText
-            className={styles.text}
-            primary={msg?.createdTs ?? ""}
-          />
+          <ListItemText className={styles.text} primary={createdTs} />
         </div>
       </StyledListItem>
     )
