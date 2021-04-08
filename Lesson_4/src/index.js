@@ -1,27 +1,28 @@
 import { ThemeProvider, createMuiTheme } from "@material-ui/core"
-import React, { Component } from "react"
+import React from "react"
 import ReactDOM from "react-dom"
-import { Header, MessageList, Layout, ChatList } from "./components"
-
+import { BrowserRouter, Switch, Route } from "react-router-dom"
 import "./index.css"
-
-class App extends Component {
-  render() {
-    return <MessageList />
-  }
-}
+import { ChatPage } from "./pages"
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#ffffff'
+      main: '#182742'
     },
   },
 })
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <Layout header={<Header />} messages={<App />} chats={<ChatList />} />
-  </ThemeProvider>,
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <Switch>
+        <Route path="/chat" component={(params) => (
+          <ChatPage {...params} />
+        )} />
+        <Route path="*" component={() => <h1>404</h1>} />
+      </Switch>
+    </ThemeProvider>
+  </BrowserRouter>,
   document.getElementById("root"),
 )

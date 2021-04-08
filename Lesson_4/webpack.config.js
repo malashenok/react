@@ -26,9 +26,9 @@ module.exports = {
   optimization: isDevelopment
     ? {}
     : {
-        minimize: true,
-        minimizer: [new OptimizeCssAssetWebpackPlugin()],
-      },
+      minimize: true,
+      minimizer: [new OptimizeCssAssetWebpackPlugin()],
+    },
   plugins: [
     new HtmlWebpackPlugin({
       title: "hello webpack",
@@ -59,24 +59,24 @@ module.exports = {
     isDevelopment
       ? () => ({})
       : new ImageMinimizerPlugin({
-          minimizerOptions: {
-            plugins: [
-              ["gifsicle", { interlaced: true }],
-              ["jpegtran", { progressive: true }],
-              ["optipng", { optimizationLevel: 5 }],
-              [
-                "svgo",
-                {
-                  plugins: [
-                    {
-                      removeViewBox: false,
-                    },
-                  ],
-                },
-              ],
+        minimizerOptions: {
+          plugins: [
+            ["gifsicle", { interlaced: true }],
+            ["jpegtran", { progressive: true }],
+            ["optipng", { optimizationLevel: 5 }],
+            [
+              "svgo",
+              {
+                plugins: [
+                  {
+                    removeViewBox: false,
+                  },
+                ],
+              },
             ],
-          },
-        }),
+          ],
+        },
+      }),
   ],
   module: {
     rules: [
@@ -91,11 +91,11 @@ module.exports = {
           isDevelopment
             ? "style-loader"
             : {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: path.resolve(__dirname, "dist/css"),
-                },
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                publicPath: path.resolve(__dirname, "dist/css"),
               },
+            },
           {
             loader: "css-loader",
             options: {
@@ -110,13 +110,13 @@ module.exports = {
         use: [
           isDevelopment
             ? // Creates `style` nodes from JS strings
-              "style-loader"
+            "style-loader"
             : {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: path.resolve(__dirname, "dist/css"),
-                },
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                publicPath: path.resolve(__dirname, "dist/css"),
               },
+            },
           {
             // Translates CSS into CommonJS
             loader: "css-loader",

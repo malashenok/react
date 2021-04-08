@@ -1,28 +1,28 @@
+import { Container, Grid } from '@material-ui/core'
 import PropTypes from "prop-types"
 import React, { Component } from "react"
-import { Container, Grid } from '@material-ui/core'
 import styles from "./layout.module.css"
 
 export class Layout extends Component {
   static propTypes = {
-    messages: PropTypes.node.isRequired,
     chats: PropTypes.node.isRequired,
     header: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired
   }
 
   render() {
-    const { header, chats, messages } = this.props
+    const { header, chats, children } = this.props
     return (
       <Container maxWidth="lg" className={styles.root}>
-        <Grid container spacing={3}>
-          <Grid item lg={12}>
+        <Grid container={true} spacing={3}>
+          <Grid item={true} xs={12} sm={12} md={12} lg={12}>
             {header}
           </Grid>
-          <Grid item lg={4}>
+          <Grid item={true} xs={4} sm={4} md={4} lg={4}>
             {chats}
           </Grid>
-          <Grid item lg={8}>
-            {messages}
+          <Grid item={true} xs={8} sm={8} md={8} lg={8}>
+            {children}
           </Grid>
         </Grid>
       </Container>
