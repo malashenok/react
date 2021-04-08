@@ -42,16 +42,13 @@ export class MessageListView extends Component {
 
   render() {
     const {
-      match: {
-        params: { id },
-      },
-    } = this.props
-
-    const {
       messages,
       conversations,
       sendMessageWithDispatch,
       changeValueWithDispatch,
+      match: {
+        params: { id },
+      },
     } = this.props
 
     const value = conversations.find((e) => e.title === id)?.value ?? ""
