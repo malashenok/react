@@ -23,15 +23,36 @@ const StyledInput = withStyles(() => {
 export class MessageListView extends Component {
   ref = createRef()
 
-  handlePressInput = (event, value, id) => {
-    if (event.code === "Enter" && value) {
-      this.props.sendMessageWithDispatch({
-        id,
-        author: "User",
-        message: value,
-        createdTs: format(new Date(), "HH:mm:ss"),
-      })
+  handlePressInput = ({ code }) => {
+    if (code === "Enter") {
+      this.handleSendMessage()
     }
+  }
+
+  handleChangeInput = (event) => {
+    const { changeValue, match } = this.props
+    const { id } = match.params
+
+    changeValue({ title: id, value: event?.target.value || "" })
+  }
+
+  handleSendMessage = () => {
+    const { sendMessage, value, match } = this.props
+    const { id } = match.params
+
+    if (!value) {
+      return
+    }
+
+    const newMessage = {
+      id,
+      author: "User",
+      message: value,
+      createdTs: format(new Date(), "HH:mm:ss"),
+    }
+
+    sendMessage(newMessage)
+    this.handleChangeInput()
   }
 
   handleScrollBottom = () => {
@@ -40,40 +61,28 @@ export class MessageListView extends Component {
     }
   }
 
+  componentDidUpdate() {
+    this.handleScrollBottom()
+  }
+
   render() {
-    const {
-      messages,
-      conversations,
-      sendMessageWithDispatch,
-      changeValueWithDispatch,
-      match: {
-        params: { id },
-      },
-    } = this.props
-
-    const value = conversations.find((e) => e.title === id)?.value ?? ""
-
-    const newMessage = {
-      author: "User",
-      message: value,
-      createdTs: format(new Date(), "HH:mm:ss"),
-    }
+    const { messages, value } = this.props
 
     return (
       <>
         <div ref={this.ref} className={styles.grid}>
-          {(messages[id] ?? []).map((message, index) => (
+          {messages.map((message, index) => (
             <Message msg={message} key={index} />
           ))}
         </div>
         <StyledInput
           fullWidth={true}
           value={value}
-          onChange={(e) => {
-            changeValueWithDispatch({ title: id, value: e.target.value })
+          onChange={(event) => {
+            this.handleChangeInput(event)
           }}
-          onKeyPress={(e) => {
-            this.handlePressInput(e, value, id)
+          onKeyPress={(event) => {
+            this.handlePressInput(event)
           }}
           placeholder="Введите сообщение..."
           endAdornment={
@@ -82,14 +91,7 @@ export class MessageListView extends Component {
                 <Send
                   className={styles.icon}
                   onClick={() => {
-                    sendMessageWithDispatch({
-                      id,
-                      ...newMessage,
-                    })
-                    changeValueWithDispatch({
-                      title: id,
-                      value: "",
-                    })
+                    this.handleSendMessage()
                   }}
                 />
               )}
@@ -101,14 +103,21 @@ export class MessageListView extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  messages: state.messagesReducer,
-  conversations: state.conversationsReducer,
-})
+const mapStateToProps = (state, props) => {
+  const { id } = props.match.params
+
+  return {
+    messages: state.messagesReducer[id] || [],
+    value:
+      state.conversationsReducer.find(
+        (conversation) => conversation.title === id,
+      )?.value || "",
+  }
+}
 
 const mapDispatchToProps = (dispatch) => ({
-  sendMessageWithDispatch: (params) => dispatch(sendMessage(params)),
-  changeValueWithDispatch: (params) => dispatch(changeValue(params)),
+  sendMessage: (params) => dispatch(sendMessage(params)),
+  changeValue: (params) => dispatch(changeValue(params)),
 })
 
 export const MessageList = connect(
