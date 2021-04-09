@@ -1,17 +1,17 @@
 .wrapper {
-  display: flex;
-  flex-direction: column;
   position: absolute;
   top: 50%;
   left: 50%;
   height: 400px;
   width: 500px;
   background-color: #2b5278;
-  border: "2px solid #000";
+  border: 2px solid white;
   padding: 20px;
   color: white;
   transform: translate(-50%, -50%);
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .wrapper ul li {
@@ -20,11 +20,27 @@
 }
 
 .wrapper ul {
+  margin-top: 20px;
   overflow-y: auto;
   flex-grow: 1;
 }
 
 .title {
   text-align: center;
-  flex: none;
+}
+
+.corner {
+  position: absolute;
+  right: 10px;
+  top: 3px;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  color: #182533;
+}
+
+.closeButton:hover {
+  color: white;
 }
