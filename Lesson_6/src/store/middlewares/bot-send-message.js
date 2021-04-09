@@ -2,7 +2,7 @@ import { format } from "date-fns"
 import { MESSAGE_SEND, sendMessage } from "../messages"
 
 export const botSendMessage = (store) => (next) => (action) => {
-  const { id, author } = action.payload
+  const { id, author } = action.payload ?? {}
 
   if (action.type === MESSAGE_SEND && author !== "bot") {
     setTimeout(() => {
