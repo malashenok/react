@@ -25,13 +25,9 @@ const StyledListItem = withStyles(() => ({
 
 export class Chat extends Component {
   render() {
-    const {
-      selected,
-      title,
-      lastMessage: [msg = {}],
-    } = this.props
+    const { selected, title, lastMessage } = this.props
 
-    const { author = "", message = "", createdTs = "" } = msg ?? {}
+    const { author = "", message = "", createdTs = "" } = lastMessage ?? {}
 
     return (
       <StyledListItem button={true} selected={selected}>

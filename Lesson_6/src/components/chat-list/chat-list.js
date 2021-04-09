@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { addConversation } from "../../store/conversations"
-import { AddContactModal } from "../modal"
+import { AddContactModal } from "../add-to-contact-modal"
 import { Chat } from "./chat"
 import styles from "./chat-list.module.css"
 
@@ -19,36 +19,34 @@ export class ChatListView extends Component {
 
   render() {
     const { isOpen } = this.state
-    const {
-      match,
-      conversations,
-      messages,
-      addConversationWithDispatch,
-    } = this.props
-
-    const chatId = match?.params.id || ""
+    const { match, conversations, messages, addConversation } = this.props
+    const { id } = match.params
 
     return (
       <>
         <div className={styles.wrapper}>
           <List component="nav">
-            {conversations.map((chat) => (
-              <Link key={chat.title} to={`/chat/${chat.title}`}>
-                <Chat
-                  title={chat.title}
-                  selected={chatId === chat.title}
-                  lastMessage={messages[chat.title]?.slice(-1) ?? []}
-                />
-              </Link>
-            ))}
+            {conversations.map((chat) => {
+              const msg = messages[chat.title] || []
+              return (
+                <Link key={chat.title} to={`/chat/${chat.title}`}>
+                  <Chat
+                    title={chat.title}
+                    selected={id === chat.title}
+                    lastMessage={msg[msg.length - 1]}
+                  />
+                </Link>
+              )
+            })}
           </List>
 
           <AddContactModal
             isOpen={isOpen}
             onClose={this.toggleModal}
             onClick={(title) => {
-              addConversationWithDispatch({ title })
+              addConversation({ title })
             }}
+            conversations={conversations}
           />
           <div className={styles.button}>
             <Button
@@ -73,7 +71,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  addConversationWithDispatch: (params) => dispatch(addConversation(params)),
+  addConversation: (params) => dispatch(addConversation(params)),
 })
 
 export const ChatList = connect(
