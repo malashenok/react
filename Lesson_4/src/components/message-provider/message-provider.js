@@ -28,7 +28,7 @@ export class MessageProvider extends Component {
     },
   }
 
-  handleValueChanged = ({ target }) => {
+  handleChangeValue = ({ target }) => {
 
     this.setState((state, props) => ({
       conversations: state.conversations.map(e => {
@@ -40,7 +40,7 @@ export class MessageProvider extends Component {
     }))
   }
 
-  sendMessage({ author, message, createdTs }) {
+  sendMessage = ({ author, message, createdTs }) => {
     this.setState((state, props) => {
       const { id } = props.match.params
 
