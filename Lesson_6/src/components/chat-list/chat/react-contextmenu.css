@@ -1,3 +1,15 @@
+.custom-root {
+  background-color: #fff;
+}
+
+.custom-divider {
+  background-color: #000;
+}
+
+.custom-selected {
+  background-color: #f00;
+}
+
 .react-contextmenu {
   background-color: #fff;
   background-clip: padding-box;

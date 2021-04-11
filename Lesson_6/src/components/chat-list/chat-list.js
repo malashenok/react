@@ -46,6 +46,7 @@ export class ChatListView extends Component {
                   delChat={(title) => {
                     delConversation({ title })
                   }}
+                  addChat={this.toggleModal}
                   onClick={() => {
                     this.handleNavigate(`/chat/${chat.title}`)
                   }}

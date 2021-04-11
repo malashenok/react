@@ -9,6 +9,8 @@ import classnames from "classnames"
 import React, { Component } from "react"
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu"
 import styles from "./chat.module.css"
+import "./react-contextmenu.css"
+
 const StyledListItem = withStyles(() => ({
   root: {
     "&": {
@@ -23,9 +25,23 @@ const StyledListItem = withStyles(() => ({
   },
 }))(ListItem)
 
+const attributes = {
+  className: "custom-root",
+  disabledclassname: "custom-disabled",
+  dividerclassname: "custom-divider",
+  selectedclassname: "custom-selected",
+}
+
 export class Chat extends Component {
   render() {
-    const { selected, title, lastMessage, delChat, onClick } = this.props
+    const {
+      selected,
+      title,
+      lastMessage,
+      delChat,
+      onClick,
+      addChat,
+    } = this.props
 
     const { author = "", message = "", createdTs = "" } = lastMessage ?? {}
 
@@ -58,10 +74,21 @@ export class Chat extends Component {
         </ContextMenuTrigger>
         <ContextMenu id={title}>
           <MenuItem
+            data={{ action: "add" }}
+            onClick={() => {
+              addChat()
+            }}
+            attributes={attributes}
+          >
+            Добавить
+          </MenuItem>
+
+          <MenuItem
             data={{ action: "delete" }}
             onClick={() => {
               delChat(title)
             }}
+            attributes={attributes}
           >
             Удалить
           </MenuItem>
