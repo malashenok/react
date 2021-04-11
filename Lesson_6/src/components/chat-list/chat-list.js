@@ -1,12 +1,10 @@
 import { List, Button } from "@material-ui/core"
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
-import { addConversation } from "../../store/conversations"
+import { addConversation, delConversation } from "../../store/conversations"
 import { AddContactModal } from "../add-to-contact-modal"
 import { Chat } from "./chat"
 import styles from "./chat-list.module.css"
-
 export class ChatListView extends Component {
   state = {
     isOpen: false,
@@ -17,9 +15,20 @@ export class ChatListView extends Component {
     this.setState((state) => ({ isOpen: !state.isOpen }))
   }
 
+  handleNavigate = (link) => {
+    const { history } = this.props
+    history.push(link)
+  }
+
   render() {
     const { isOpen } = this.state
-    const { match, conversations, messages, addConversation } = this.props
+    const {
+      match,
+      conversations,
+      messages,
+      addConversation,
+      delConversation,
+    } = this.props
     const { id } = match.params
 
     return (
@@ -29,13 +38,18 @@ export class ChatListView extends Component {
             {conversations.map((chat) => {
               const msg = messages[chat.title] || []
               return (
-                <Link key={chat.title} to={`/chat/${chat.title}`}>
-                  <Chat
-                    title={chat.title}
-                    selected={id === chat.title}
-                    lastMessage={msg[msg.length - 1]}
-                  />
-                </Link>
+                <Chat
+                  key={chat.title}
+                  title={chat.title}
+                  selected={id === chat.title}
+                  lastMessage={msg[msg.length - 1]}
+                  delChat={(title) => {
+                    delConversation({ title })
+                  }}
+                  onClick={() => {
+                    this.handleNavigate(`/chat/${chat.title}`)
+                  }}
+                />
               )
             })}
           </List>
@@ -72,6 +86,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   addConversation: (params) => dispatch(addConversation(params)),
+  delConversation: (params) => dispatch(delConversation(params)),
 })
 
 export const ChatList = connect(

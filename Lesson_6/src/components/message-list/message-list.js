@@ -86,14 +86,12 @@ export class MessageListView extends Component {
           placeholder="Введите сообщение..."
           endAdornment={
             <InputAdornment position="end">
-              {value && (
-                <Send
-                  className={styles.icon}
-                  onClick={() => {
-                    this.handleSendMessage()
-                  }}
-                />
-              )}
+              <Send
+                className={styles.icon}
+                onClick={() => {
+                  this.handleSendMessage()
+                }}
+              />
             </InputAdornment>
           }
         />
