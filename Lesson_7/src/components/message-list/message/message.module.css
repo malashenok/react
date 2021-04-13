@@ -1,0 +1,23 @@
+.message {
+  font-size: 14px;
+  text-align: left;
+  margin: 5px;
+  position: relative;
+  width: 400px;
+  background-color: #2b5278;
+  border-radius: 5px;
+  padding: 10px;
+  line-height: 14px;
+  color: white;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.user {
+  display: inline-block;
+  text-align: right;
+}
+
+.message p {
+  margin-top: 5px;
+}
