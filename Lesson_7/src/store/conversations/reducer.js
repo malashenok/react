@@ -1,9 +1,17 @@
 import { createReducer } from "../../utils/create-reducer"
-import { ADD_CONVERSATION, CHANGE_VALUE, DELETE_CONVERSATION } from "./types"
+import {
+  ADD_CONVERSATION,
+  CHANGE_VALUE,
+  DELETE_CONVERSATION,
+  GET_CONVERSATION_SUCCESS,
+  GET_CONVERSATION_ERROR,
+  GET_CONVERSATION_PENDING,
+} from "./types"
 
 const initialState = {
   conversations: [{ title: "room1", value: "" }],
-  conversationsPending: true,
+  conversationsPending: false,
+  error: null,
 }
 
 export const conversationsReducer = createReducer(initialState, {
@@ -42,5 +50,19 @@ export const conversationsReducer = createReducer(initialState, {
     conversations: state.conversations.filter(
       (conversation) => conversation.title !== payload.title,
     ),
+  }),
+  [GET_CONVERSATION_PENDING]: (state) => ({
+    ...state,
+    conversationsPending: true,
+  }),
+  [GET_CONVERSATION_SUCCESS]: (state, { payload }) => ({
+    ...state,
+    conversations: payload,
+    conversationsPending: false,
+  }),
+  [GET_CONVERSATION_ERROR]: (state, { payload }) => ({
+    ...state,
+    conversationsPending: false,
+    error: payload,
   }),
 })

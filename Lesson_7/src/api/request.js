@@ -1,11 +1,15 @@
 import axios from "axios"
+import { withLogger } from "./logger"
+
 class Request {
   constructor(token) {
     this.token = token
-    this.request = axios.create({
-      baseURL: "http://localhost:8000",
-      timeout: 1000,
-    })
+    this.request = withLogger(
+      axios.create({
+        baseURL: "http://localhost:8000",
+        timeout: 1000,
+      }),
+    )
   }
 
   requestWithToken = (token) => {

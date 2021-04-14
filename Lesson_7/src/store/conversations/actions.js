@@ -1,4 +1,3 @@
-import { request } from "../../api"
 import {
   ADD_CONVERSATION,
   CHANGE_VALUE,
@@ -43,14 +42,15 @@ export const delConversation = (params) => {
     payload: params,
   }
 }
+// thunk
+export const getConversations = () => async (dispatch, getState, request) => {
+  dispatch({ type: GET_CONVERSATION_PENDING })
 
-export const getConversations = () => async (dispatch, getState, params) => {
-  dispatch({ type: "PENDING" })
-
+  console.log("getState", getState())
   try {
     const { data } = await request.get("conversations")
-    dispatch({ type: "SUCESS", payload: data })
+    dispatch({ type: GET_CONVERSATION_SUCCESS, payload: data })
   } catch {
-    dispatch({ type: "ERROR" })
+    dispatch({ type: GET_CONVERSATION_ERROR })
   }
 }
