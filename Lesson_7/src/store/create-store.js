@@ -7,6 +7,7 @@ import thunk from "redux-thunk"
 import { request } from "../api"
 import { conversationsReducer } from "./conversations"
 import { messagesReducer } from "./messages"
+import { profilesReducer } from "./profiles"
 import { botSendMessage, logger } from "./middlewares"
 
 export const history = createBrowserHistory()

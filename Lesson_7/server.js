@@ -25,6 +25,11 @@ const messages = {
   ],
 }
 
+const profiles = [
+  { id: 1, name: "bot", group: "admin" },
+  { id: 2, name: "User", group: "user" },
+]
+
 const getConversations = (req, res) => {
   res.status(200).send(conversations)
 }
@@ -34,7 +39,15 @@ const getMessagesById = (req, res) => {
   res.status(200).send({ messages: messages[id] || [], roomId: id })
 }
 
+const getProfilesByUserName = (req, res) => {
+  const { name } = req.params
+  res.status(200).send({
+    profiles: profiles.filter((profile) => profile.name === name) || [],
+  })
+}
+
 server.get("/conversations", getConversations)
 server.get("/messages/:id", getMessagesById)
+server.get("/profiles/:name", getProfilesByUserName)
 
 server.listen("8000", () => console.log("port 8000"))

@@ -33,6 +33,10 @@ const attributes = {
 }
 
 export class Chat extends Component {
+  componentDidMount() {
+    this.props.getProfileByUserName("bot")
+  }
+
   render() {
     const {
       selected,
