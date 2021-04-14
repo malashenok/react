@@ -1,30 +1,60 @@
 import { createReducer } from "../../utils/create-reducer"
-import { MESSAGE_SEND, MESSAGE_DELETE } from "./types"
+import {
+  MESSAGE_SEND,
+  MESSAGE_DELETE,
+  GET_MESSAGE_ERROR,
+  GET_MESSAGE_SUCCESS,
+  GET_MESSAGE_PENDING,
+} from "./types"
 
 const initialState = {
-  room1: [],
-  room2: [],
+  messages: {},
+  messagesPending: false,
+  error: null,
 }
 
 export const messagesReducer = createReducer(initialState, {
   [MESSAGE_SEND]: (state, { payload = {} }) => ({
     ...state,
-    [payload.id]: [
-      ...(state[payload.id] || []),
-      {
-        author: payload.author,
-        message: payload.message,
-        createdTs: payload.createdTs,
-      },
-    ],
+    messages: {
+      ...state.messages,
+      [payload.id]: [
+        ...(state.messages[payload.id] || []),
+        {
+          author: payload.author,
+          message: payload.message,
+          createdTs: payload.createdTs,
+        },
+      ],
+    },
   }),
 
   [MESSAGE_DELETE]: (state, { payload }) => {
-    return Object.keys(state).reduce((obj, key) => {
-      if (key !== payload.id) {
-        obj[key] = state[key]
-      }
-      return obj
-    }, {})
+    return {
+      ...state,
+      messages: Object.keys(state.messages).reduce((obj, key) => {
+        if (key !== payload.id) {
+          obj[key] = state.messages[key]
+        }
+        return obj
+      }, {}),
+    }
   },
+  [GET_MESSAGE_PENDING]: (state) => ({
+    ...state,
+    messagesPending: true,
+  }),
+  [GET_MESSAGE_SUCCESS]: (state, { payload }) => ({
+    ...state,
+    messages: {
+      ...state.messages,
+      [payload.roomId]: payload.messages,
+    },
+    messagesPending: false,
+  }),
+  [GET_MESSAGE_ERROR]: (state, { payload }) => ({
+    ...state,
+    messagesPending: false,
+    error: payload,
+  }),
 })

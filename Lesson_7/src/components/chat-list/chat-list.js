@@ -86,7 +86,7 @@ export class ChatListView extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  messages: state.messagesReducer,
+  messages: state.messagesReducer.messages,
   conversations: state.conversationsReducer.conversations.sort((a, b) =>
     a.title.localeCompare(b.title),
   ),

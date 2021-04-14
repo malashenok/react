@@ -46,7 +46,6 @@ export const delConversation = (params) => {
 export const getConversations = () => async (dispatch, getState, request) => {
   dispatch({ type: GET_CONVERSATION_PENDING })
 
-  console.log("getState", getState())
   try {
     const { data } = await request.get("conversations")
     dispatch({ type: GET_CONVERSATION_SUCCESS, payload: data })

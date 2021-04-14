@@ -1,2 +1,5 @@
 export const MESSAGE_SEND = "@messages/send"
 export const MESSAGE_DELETE = "@messages/delete"
+export const GET_MESSAGE_ERROR = "@messages/get messages error"
+export const GET_MESSAGE_SUCCESS = "@messages/get messages success"
+export const GET_MESSAGE_PENDING = "@messages/get messages pending"

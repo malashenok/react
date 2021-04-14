@@ -3,7 +3,7 @@ import { Send } from "@material-ui/icons"
 import { format } from "date-fns"
 import React, { Component, createRef } from "react"
 import { connect } from "react-redux"
-import { changeValue, sendMessage } from "../../store"
+import { changeValue, sendMessage, getMessagesById } from "../../store"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -60,8 +60,27 @@ export class MessageListView extends Component {
     }
   }
 
-  componentDidUpdate() {
+  getMessages = () => {
+    const { match, getMessagesById } = this.props
+    const { id } = match.params
+
+    getMessagesById(id)
+  }
+
+  componentDidUpdate(prevProps) {
+    const { id: prevId } = prevProps.match.params
+    const { id } = this.props.match.params
+    const messages = prevProps.messages
+
+    if (prevId !== id && messages?.length === 0) {
+      this.getMessages()
+    }
+
     this.handleScrollBottom()
+  }
+
+  componentDidMount() {
+    this.getMessages()
   }
 
   render() {
@@ -104,7 +123,7 @@ const mapStateToProps = (state, props) => {
   const { id } = props.match.params
 
   return {
-    messages: state.messagesReducer[id] || [],
+    messages: state.messagesReducer.messages[id] || [],
     value:
       state.conversationsReducer.conversations.find(
         (conversation) => conversation.title === id,
@@ -115,6 +134,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => ({
   sendMessage: (params) => dispatch(sendMessage(params)),
   changeValue: (params) => dispatch(changeValue(params)),
+  getMessagesById: (id) => dispatch(getMessagesById(id)),
 })
 
 export const MessageList = connect(

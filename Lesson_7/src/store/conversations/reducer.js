@@ -9,7 +9,7 @@ import {
 } from "./types"
 
 const initialState = {
-  conversations: [{ title: "room1", value: "" }],
+  conversations: [],
   conversationsPending: false,
   error: null,
 }

@@ -1,6 +1,6 @@
 const cors = require("cors")
+const { format } = require("date-fns")
 const express = require("express")
-
 const server = express()
 
 server.use(cors())
@@ -8,17 +8,20 @@ server.use(cors())
 const conversations = [
   { title: "room1", value: "" },
   { title: "room2", value: "" },
-  { title: "room3", value: "" },
 ]
 
 const messages = {
   room1: [
-    { author: "User", message: "test!", createdTs: new Date() },
-    { author: "Bot", message: "Привет, я бот!", createdTs: new Date() },
-  ],
-  room3: [
-    { author: "User", message: "test!", createdTs: new Date() },
-    { author: "Bot", message: "Привет, я бот!", createdTs: new Date() },
+    {
+      author: "User",
+      message: "Как дела?",
+      createdTs: format(new Date(), "HH:mm:ss"),
+    },
+    {
+      author: "bot",
+      message: "Привет, я бот!",
+      createdTs: format(new Date(), "HH:mm:ss"),
+    },
   ],
 }
 
