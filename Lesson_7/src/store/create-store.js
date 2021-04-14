@@ -1,4 +1,4 @@
-import { connectRouter } from "connected-react-router"
+import { connectRouter, routerMiddleware } from "connected-react-router"
 import { createBrowserHistory } from "history"
 import { createStore, combineReducers, applyMiddleware, compose } from "redux"
 import { persistStore, persistReducer } from "redux-persist"
@@ -23,7 +23,7 @@ export const store = createStore(
     }),
   ),
   compose(
-    applyMiddleware(botSendMessage, logger, delChat),
+    applyMiddleware(botSendMessage, logger, delChat, routerMiddleware(history)),
     window.__REDUX_DEVTOOLS_EXTENSION__
       ? window.__REDUX_DEVTOOLS_EXTENSION__()
       : () => {},

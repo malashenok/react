@@ -1,3 +1,4 @@
+import { createReducer } from "../../utils/create-reducer"
 import { ADD_CONVERSATION, CHANGE_VALUE, DELETE_CONVERSATION } from "./types"
 
 const initialState = [
@@ -5,26 +6,26 @@ const initialState = [
   { title: "room2", value: "" },
 ]
 
-export const conversationsReducer = (state = initialState, action) => {
-  const { title, value } = action.payload ?? {}
+export const conversationsReducer = createReducer(initialState, {
+  [ADD_CONVERSATION]: (state, { payload }) => {
+    if (state.findIndex((e) => e.title === payload.title) !== -1) {
+      return state.filter(
+        (conversation) => conversation.title !== payload.title,
+      )
+    } else {
+      return [...state, { title: payload.title, value: "" }]
+    }
+  },
 
-  switch (action.type) {
-    case ADD_CONVERSATION:
-      if (state.findIndex((e) => e.title === title) !== -1) {
-        return state.filter((conversation) => conversation.title !== title)
-      } else {
-        return [...state, { title, value: "" }]
-      }
-    case DELETE_CONVERSATION:
-      return state.filter((conversation) => conversation.title !== title)
-    case CHANGE_VALUE:
-      return state.map((conversation) => {
-        if (conversation.title === title) {
-          return { ...conversation, value }
-        }
-        return conversation
-      })
-    default:
-      return state
-  }
-}
+  [CHANGE_VALUE]: (state, { payload }) => {
+    return state.map((conversation) =>
+      conversation.title === payload.title
+        ? { ...conversation, value: payload.value }
+        : conversation,
+    )
+  },
+
+  [DELETE_CONVERSATION]: (state, { payload }) => {
+    return state.filter((conversation) => conversation.title !== payload.title)
+  },
+})

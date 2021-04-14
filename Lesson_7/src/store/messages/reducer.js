@@ -1,3 +1,4 @@
+import { createReducer } from "../../utils/create-reducer"
 import { MESSAGE_SEND, MESSAGE_DELETE } from "./types"
 
 const initialState = {
@@ -5,23 +6,25 @@ const initialState = {
   room2: [],
 }
 
-export const messagesReducer = (state = initialState, action) => {
-  const { id, author, message, createdTs } = action.payload ?? {}
+export const messagesReducer = createReducer(initialState, {
+  [MESSAGE_SEND]: (state, { payload = {} }) => ({
+    ...state,
+    [payload.id]: [
+      ...(state[payload.id] || []),
+      {
+        author: payload.author,
+        message: payload.message,
+        createdTs: payload.createdTs,
+      },
+    ],
+  }),
 
-  switch (action.type) {
-    case MESSAGE_SEND:
-      return {
-        ...state,
-        [id]: [...(state[id] || []), { author, message, createdTs }],
+  [MESSAGE_DELETE]: (state, { payload }) => {
+    return Object.keys(state).reduce((obj, key) => {
+      if (key !== payload.id) {
+        obj[key] = state[key]
       }
-    case MESSAGE_DELETE:
-      return Object.keys(state).reduce((object, key) => {
-        if (key !== id) {
-          object[key] = state[key]
-        }
-        return object
-      }, {})
-    default:
-      return state
-  }
-}
+      return obj
+    }, {})
+  },
+})

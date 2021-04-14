@@ -39,7 +39,7 @@ export class Chat extends Component {
       title,
       lastMessage,
       delChat,
-      onClick,
+      handleNavigate,
       addChat,
     } = this.props
 
@@ -51,13 +51,10 @@ export class Chat extends Component {
           <StyledListItem
             button={true}
             selected={selected}
-            // if last message author is bot then blink
             className={classnames({
               [styles.blink]: author === "bot",
             })}
-            onClick={() => {
-              onClick()
-            }}
+            onClick={handleNavigate}
           >
             <ListItemIcon>
               <AccountCircle fontSize="large" className={styles.icon} />

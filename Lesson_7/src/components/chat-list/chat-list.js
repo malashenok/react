@@ -1,4 +1,5 @@
 import { List, Button } from "@material-ui/core"
+import { push } from "connected-react-router"
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { addConversation, delConversation } from "../../store/conversations"
@@ -15,10 +16,10 @@ export class ChatListView extends Component {
     this.setState((state) => ({ isOpen: !state.isOpen }))
   }
 
-  handleNavigate = (link) => {
-    const { history } = this.props
-    history.push(link)
-  }
+  // handleNavigate = (link) => {
+  //   const { history } = this.props
+  //   history.push(link)
+  // }
 
   render() {
     const { isOpen } = this.state
@@ -28,6 +29,7 @@ export class ChatListView extends Component {
       messages,
       addConversation,
       delConversation,
+      push,
     } = this.props
     const { id } = match.params
 
@@ -47,9 +49,7 @@ export class ChatListView extends Component {
                     delConversation({ title })
                   }}
                   addChat={this.toggleModal}
-                  onClick={() => {
-                    this.handleNavigate(`/chat/${chat.title}`)
-                  }}
+                  handleNavigate={() => push(`/chat/${chat.title}`)}
                 />
               )
             })}
@@ -88,6 +88,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   addConversation: (params) => dispatch(addConversation(params)),
   delConversation: (params) => dispatch(delConversation(params)),
+  push: (link) => dispatch(push(link)),
 })
 
 export const ChatList = connect(
