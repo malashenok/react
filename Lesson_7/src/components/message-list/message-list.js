@@ -3,7 +3,12 @@ import { Send } from "@material-ui/icons"
 import { format } from "date-fns"
 import React, { Component, createRef } from "react"
 import { connect } from "react-redux"
-import { changeValue, sendMessage, getMessagesById } from "../../store"
+import {
+  changeValue,
+  sendMessage,
+  getMessagesById,
+  delMessageByKeys,
+} from "../../store"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -84,13 +89,18 @@ export class MessageListView extends Component {
   }
 
   render() {
-    const { messages, value } = this.props
-
+    const { messages, value, delMessageByKeys } = this.props
+    const { id } = this.props.match.params
     return (
       <>
         <div ref={this.ref} className={styles.grid}>
           {messages.map((message, index) => (
-            <Message msg={message} key={index} />
+            <Message
+              msg={message}
+              key={index}
+              id={id}
+              delMessage={delMessageByKeys}
+            />
           ))}
         </div>
         <StyledInput
@@ -135,6 +145,7 @@ const mapDispatchToProps = (dispatch) => ({
   sendMessage: (params) => dispatch(sendMessage(params)),
   changeValue: (params) => dispatch(changeValue(params)),
   getMessagesById: (id) => dispatch(getMessagesById(id)),
+  delMessageByKeys: (params) => dispatch(delMessageByKeys(params)),
 })
 
 export const MessageList = connect(

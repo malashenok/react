@@ -1,6 +1,7 @@
 import {
   MESSAGE_SEND,
   MESSAGE_DELETE,
+  MESSAGE_DELETE_BY_KEYS,
   GET_MESSAGE_ERROR,
   GET_MESSAGE_SUCCESS,
   GET_MESSAGE_PENDING,
@@ -16,6 +17,13 @@ export const sendMessage = (params) => {
 export const delMessage = (params) => {
   return {
     type: MESSAGE_DELETE,
+    payload: params,
+  }
+}
+
+export const delMessageByKeys = (params) => {
+  return {
+    type: MESSAGE_DELETE_BY_KEYS,
     payload: params,
   }
 }

@@ -2,6 +2,7 @@ import { createReducer } from "../../utils/create-reducer"
 import {
   MESSAGE_SEND,
   MESSAGE_DELETE,
+  MESSAGE_DELETE_BY_KEYS,
   GET_MESSAGE_ERROR,
   GET_MESSAGE_SUCCESS,
   GET_MESSAGE_PENDING,
@@ -40,6 +41,17 @@ export const messagesReducer = createReducer(initialState, {
       }, {}),
     }
   },
+  [MESSAGE_DELETE_BY_KEYS]: (state, { payload }) => ({
+    ...state,
+    messages: {
+      ...state.messages,
+      [payload.id]: state.messages[payload.id].filter(
+        (msg) =>
+          msg.message !== payload.message &&
+          msg.createdTs !== payload.createdTs,
+      ),
+    },
+  }),
   [GET_MESSAGE_PENDING]: (state) => ({
     ...state,
     messagesPending: true,
