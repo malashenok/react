@@ -2,10 +2,15 @@ import { List, Button } from "@material-ui/core"
 import { push } from "connected-react-router"
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { addConversation, delConversation } from "../../store/conversations"
+import {
+  addConversation,
+  delConversation,
+  getConversations,
+} from "../../store/conversations"
 import { AddContactModal } from "../add-to-contact-modal"
 import { Chat } from "./chat"
 import styles from "./chat-list.module.css"
+
 export class ChatListView extends Component {
   state = {
     isOpen: false,
@@ -16,10 +21,9 @@ export class ChatListView extends Component {
     this.setState((state) => ({ isOpen: !state.isOpen }))
   }
 
-  // handleNavigate = (link) => {
-  //   const { history } = this.props
-  //   history.push(link)
-  // }
+  componentDidMount() {
+    this.props.getConversations()
+  }
 
   render() {
     const { isOpen } = this.state
@@ -30,10 +34,13 @@ export class ChatListView extends Component {
       addConversation,
       delConversation,
       push,
+      conversationsPending,
     } = this.props
     const { id } = match.params
 
-    return (
+    return conversationsPending ? (
+      <h1>Загрузка данных...</h1>
+    ) : (
       <>
         <div className={styles.wrapper}>
           <List component="nav">
@@ -80,15 +87,17 @@ export class ChatListView extends Component {
 
 const mapStateToProps = (state) => ({
   messages: state.messagesReducer,
-  conversations: state.conversationsReducer.sort((a, b) =>
+  conversations: state.conversationsReducer.conversations.sort((a, b) =>
     a.title.localeCompare(b.title),
   ),
+  conversationsPending: state.conversationsReducer.conversationsPending,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   addConversation: (params) => dispatch(addConversation(params)),
   delConversation: (params) => dispatch(delConversation(params)),
   push: (link) => dispatch(push(link)),
+  getConversations: () => dispatch(getConversations()),
 })
 
 export const ChatList = connect(

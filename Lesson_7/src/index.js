@@ -8,6 +8,7 @@ import "./index.css"
 import { PersistGate } from "redux-persist/integration/react"
 import { ChatPage } from "./pages"
 import { store, persistor, history } from "./store"
+
 const theme = createMuiTheme({
   palette: {
     primary: {

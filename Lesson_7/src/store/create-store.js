@@ -1,32 +1,42 @@
 import { connectRouter, routerMiddleware } from "connected-react-router"
 import { createBrowserHistory } from "history"
-import { createStore, combineReducers, applyMiddleware, compose } from "redux"
-import { persistStore, persistReducer } from "redux-persist"
+import { combineReducers, createStore, applyMiddleware, compose } from "redux"
+import { persistReducer, persistStore } from "redux-persist"
 import storage from "redux-persist/lib/storage"
+import thunk from "redux-thunk"
+import { request } from "../api"
 import { conversationsReducer } from "./conversations"
 import { messagesReducer } from "./messages"
-import { botSendMessage, logger, delChat } from "./middlewares"
+import { botSendMessage, logger } from "./middlewares"
+
+export const history = createBrowserHistory()
+
 const config = {
   key: "root",
   storage,
-  whitelist: ["messagesReducer", "conversationsReducer"],
+  blacklist: [],
+  whitelist: [],
 }
-export const history = createBrowserHistory()
 
 export const store = createStore(
   persistReducer(
     config,
     combineReducers({
       router: connectRouter(history),
-      conversationsReducer,
       messagesReducer,
+      conversationsReducer,
     }),
   ),
   compose(
-    applyMiddleware(botSendMessage, logger, delChat, routerMiddleware(history)),
-    window.__REDUX_DEVTOOLS_EXTENSION__
-      ? window.__REDUX_DEVTOOLS_EXTENSION__()
-      : () => {},
+    applyMiddleware(
+      thunk.withExtraArgument(request),
+      routerMiddleware(history),
+      botSendMessage,
+      logger,
+    ),
+    // window.__REDUX_DEVTOOLS_EXTENSION__
+    //   ? window.__REDUX_DEVTOOLS_EXTENSION__()
+    //   : () => {},
   ),
 )
 

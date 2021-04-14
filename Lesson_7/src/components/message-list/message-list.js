@@ -106,7 +106,7 @@ const mapStateToProps = (state, props) => {
   return {
     messages: state.messagesReducer[id] || [],
     value:
-      state.conversationsReducer.find(
+      state.conversationsReducer.conversations.find(
         (conversation) => conversation.title === id,
       )?.value || "",
   }
