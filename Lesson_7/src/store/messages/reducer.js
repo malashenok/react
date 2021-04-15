@@ -41,17 +41,22 @@ export const messagesReducer = createReducer(initialState, {
       }, {}),
     }
   },
-  [MESSAGE_DELETE_BY_KEYS]: (state, { payload }) => ({
-    ...state,
-    messages: {
-      ...state.messages,
-      [payload.id]: state.messages[payload.id].filter(
-        (msg) =>
-          msg.message !== payload.message &&
-          msg.createdTs !== payload.createdTs,
-      ),
-    },
-  }),
+  [MESSAGE_DELETE_BY_KEYS]: (state, { payload }) => {
+    console.log(payload, state.messages)
+    return {
+      ...state,
+      messages: {
+        ...state.messages,
+        [payload.id]: state.messages[payload.id].filter(
+          (msg) =>
+            !(
+              msg.message === payload.message &&
+              msg.createdTs === payload.createdTs
+            ),
+        ),
+      },
+    }
+  },
   [GET_MESSAGE_PENDING]: (state) => ({
     ...state,
     messagesPending: true,

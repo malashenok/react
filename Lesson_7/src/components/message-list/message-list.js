@@ -99,7 +99,8 @@ export class MessageListView extends Component {
               msg={message}
               key={index}
               id={id}
-              delMessage={delMessageByKeys}
+              index={index.toString()}
+              delMessageByKeys={delMessageByKeys}
             />
           ))}
         </div>

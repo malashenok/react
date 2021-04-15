@@ -15,8 +15,9 @@ export class Message extends Component {
   render() {
     const {
       id,
-      delMessage,
+      delMessageByKeys,
       msg: { message, author, createdTs },
+      index,
     } = this.props
 
     return (
@@ -26,22 +27,19 @@ export class Message extends Component {
             [styles.user]: author === "User",
           })}
         >
-          <ContextMenuTrigger id={createdTs}>
+          <ContextMenuTrigger id={index}>
             <h3>{author}</h3>
             <p>{message}</p>
             <p>{createdTs}</p>
           </ContextMenuTrigger>
         </div>
 
-        <ContextMenu id={createdTs}>
+        <ContextMenu id={index}>
           <MenuItem
             data={{ action: "delete" }}
             onClick={() => {
-              delMessage({
-                id,
-                message,
-                createdTs,
-              })
+              console.log(id, message, createdTs)
+              delMessageByKeys({ id, message, createdTs })
             }}
             attributes={attributes}
           >
