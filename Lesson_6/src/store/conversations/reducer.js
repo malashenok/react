@@ -1,4 +1,4 @@
-import { ADD_CONVERSATION, CHANGE_VALUE } from "./types"
+import { ADD_CONVERSATION, CHANGE_VALUE, DELETE_CONVERSATION } from "./types"
 
 const initialState = [
   { title: "room1", value: "" },
@@ -10,11 +10,13 @@ export const conversationsReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case ADD_CONVERSATION:
-      if (state.find((e) => e.title === title)) {
-        return [...state]
+      if (state.findIndex((e) => e.title === title) !== -1) {
+        return state.filter((conversation) => conversation.title !== title)
       } else {
         return [...state, { title, value: "" }]
       }
+    case DELETE_CONVERSATION:
+      return state.filter((conversation) => conversation.title !== title)
     case CHANGE_VALUE:
       return state.map((conversation) => {
         if (conversation.title === title) {

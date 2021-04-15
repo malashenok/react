@@ -1,12 +1,33 @@
-import { createStore, combineReducers } from "redux"
+import { connectRouter } from "connected-react-router"
+import { createBrowserHistory } from "history"
+import { createStore, combineReducers, applyMiddleware, compose } from "redux"
+import { persistStore, persistReducer } from "redux-persist"
+import storage from "redux-persist/lib/storage"
 import { conversationsReducer } from "./conversations"
 import { messagesReducer } from "./messages"
-
-const reducers = combineReducers({ conversationsReducer, messagesReducer })
+import { botSendMessage, logger, delChat } from "./middlewares"
+const config = {
+  key: "root",
+  storage,
+  whitelist: ["messagesReducer", "conversationsReducer"],
+}
+export const history = createBrowserHistory()
 
 export const store = createStore(
-  reducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__
-    ? window.__REDUX_DEVTOOLS_EXTENSION__()
-    : () => {},
+  persistReducer(
+    config,
+    combineReducers({
+      router: connectRouter(history),
+      conversationsReducer,
+      messagesReducer,
+    }),
+  ),
+  compose(
+    applyMiddleware(botSendMessage, logger, delChat),
+    window.__REDUX_DEVTOOLS_EXTENSION__
+      ? window.__REDUX_DEVTOOLS_EXTENSION__()
+      : () => {},
+  ),
 )
+
+export const persistor = persistStore(store)

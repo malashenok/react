@@ -1,4 +1,4 @@
-import { ADD_CONVERSATION, CHANGE_VALUE } from "./types"
+import { ADD_CONVERSATION, CHANGE_VALUE, DELETE_CONVERSATION } from "./types"
 
 /**
  * @param {Object} params
@@ -21,6 +21,18 @@ export const addConversation = (params) => {
 export const changeValue = (params) => {
   return {
     type: CHANGE_VALUE,
+    payload: params,
+  }
+}
+
+/**
+ * @param {Object} params
+ * @param {strung} title - chat id
+ * @param {string} value - chat value
+ */
+export const delConversation = (params) => {
+  return {
+    type: DELETE_CONVERSATION,
     payload: params,
   }
 }

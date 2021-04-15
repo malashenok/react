@@ -3,8 +3,7 @@ import { Send } from "@material-ui/icons"
 import { format } from "date-fns"
 import React, { Component, createRef } from "react"
 import { connect } from "react-redux"
-import { changeValue } from "../../store/conversations"
-import { sendMessage } from "../../store/messages"
+import { changeValue, sendMessage } from "../../store"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -87,14 +86,12 @@ export class MessageListView extends Component {
           placeholder="Введите сообщение..."
           endAdornment={
             <InputAdornment position="end">
-              {value && (
-                <Send
-                  className={styles.icon}
-                  onClick={() => {
-                    this.handleSendMessage()
-                  }}
-                />
-              )}
+              <Send
+                className={styles.icon}
+                onClick={() => {
+                  this.handleSendMessage()
+                }}
+              />
             </InputAdornment>
           }
         />
