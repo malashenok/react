@@ -7,8 +7,8 @@ import thunk from "redux-thunk"
 import { request } from "../api"
 import { conversationsReducer } from "./conversations"
 import { messagesReducer } from "./messages"
-import { profilesReducer } from "./profiles"
 import { botSendMessage, logger } from "./middlewares"
+import { profilesReducer } from "./profiles"
 
 export const history = createBrowserHistory()
 
@@ -26,6 +26,7 @@ export const store = createStore(
       router: connectRouter(history),
       messagesReducer,
       conversationsReducer,
+      profilesReducer,
     }),
   ),
   compose(
@@ -35,9 +36,9 @@ export const store = createStore(
       botSendMessage,
       logger,
     ),
-    // window.__REDUX_DEVTOOLS_EXTENSION__
-    //   ? window.__REDUX_DEVTOOLS_EXTENSION__()
-    //   : () => {},
+    window.__REDUX_DEVTOOLS_EXTENSION__
+      ? window.__REDUX_DEVTOOLS_EXTENSION__()
+      : () => {},
   ),
 )
 
