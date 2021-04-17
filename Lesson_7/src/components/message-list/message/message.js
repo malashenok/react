@@ -38,7 +38,6 @@ export class Message extends Component {
           <MenuItem
             data={{ action: "delete" }}
             onClick={() => {
-              console.log(id, message, createdTs)
               delMessageByKeys({ id, message, createdTs })
             }}
             attributes={attributes}
