@@ -1,0 +1,11 @@
+.icon {
+  color: #2b5278;
+  cursor: pointer;
+}
+
+.grid {
+  overflow-y: auto;
+  height: 700px;
+  text-align: right;
+  border-radius: 5px;
+}
