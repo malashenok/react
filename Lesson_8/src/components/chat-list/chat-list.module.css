@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
+  height: 750px;
+}
+
+.button {
+  margin-top: auto;
+}
+
+h1 {
+  color: white;
+}
