@@ -3,7 +3,7 @@ import { ConnectedRouter } from "connected-react-router"
 import React from "react"
 import ReactDOM from "react-dom"
 import { Provider } from "react-redux"
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, Redirect } from "react-router-dom"
 import "./index.css"
 import { PersistGate } from "redux-persist/integration/react"
 import { ChatPage } from "./pages"
@@ -27,10 +27,7 @@ ReactDOM.render(
               path="/chat"
               component={(params) => <ChatPage {...params} />}
             />
-            <Route
-              path="*"
-              component={() => <h1 className="error">Страница не найдена</h1>}
-            />
+            <Route path="*" component={() => <Redirect to="/chat" />} />
           </Switch>
         </ThemeProvider>
       </PersistGate>
